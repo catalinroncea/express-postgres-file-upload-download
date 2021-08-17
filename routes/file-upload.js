@@ -16,6 +16,10 @@ function addFile(binaryFile) {
         });
 }
 
+/**
+ *  Upload binary with multipart/form-data content type to Postgres
+ *  Using connect-busboy to parse multipart/form-data
+ */
 router.post('/', function (req, res, next) {
     console.log('req.body', req.body);
     console.log('req.get(\'Content-Type\')',req.get('Content-Type'));
@@ -30,7 +34,6 @@ router.post('/', function (req, res, next) {
         }).on('end', () => {
             console.log('End. Buffer size', buffer.length);
             const hex = buf2hex(new Uint8Array(buffer));
-            console.log(hex);
             const byte = new bytea('\\x'  + hex);
             addFile(byte);
         })
@@ -41,6 +44,9 @@ router.post('/', function (req, res, next) {
     });
 });
 
+/**
+ *  Upload binary with application/octet-stream content type to Postgres
+ */
 router.post('/v2', function (req, res, next) {
     console.log('req.body', req.body);
     console.log('req.get(\'Content-Type\')',req.get('Content-Type'));
